@@ -1,0 +1,10 @@
+# Working in this repo
+
+- This repo is the `everise` Claude Code plugin (`plugins/everise/`) and the marketplace that lists it (`.claude-plugin/marketplace.json`): what `everise-backend` and `everise-frontend` share. A change to anything one repo alone needs belongs in that repo instead.
+- Every change goes through a branch named `bugfix/<description>` for a bug fix or `feature/<description>` for anything else, with Conventional Commits messages (`fix(guard): …`, checked by the commit-msg hook in `.githooks`, which `npm install` sets up) and a pull request to `main`. `main` rejects direct pushes and requires the `test` check; merge only once it has passed and the user has said to merge.
+- `npm test` runs the guard's tests (Node 24, no dependencies); it must exit 0 before pushing. A change to the guard comes with tests for what it now blocks, asks or allows. Check the plugin with `claude plugin validate .` too.
+- Bump `version` in `plugins/everise/.claude-plugin/plugin.json` with every change that reaches users (semantic versioning: a fix, a new rule or agent, a breaking change), and say what changed in the PR. Both repos pick it up with `claude plugin update everise@everise`.
+- Try a change before it merges by starting Claude Code in one of the repos with `--plugin-dir <this repo>/plugins/everise`.
+- The guard runs in every session of both repos: a rule that blocks too much stops everyone. Block only what a skill or the user rules out, say in the message what to do instead, and prefer asking the user over blocking where the call is theirs.
+- Keep the README and the two repos' docs sections (backend `docs/operations.md`, frontend `docs/development.md`) in step with what the plugin does, in the same change or a follow-up PR in each repo.
+- Several Claude windows and agents work on these repos at once: make each change in its own git worktree, stage files by name, and don't use `git stash` (the `everise:workspace` skill).

@@ -1,0 +1,4 @@
+# The worktrees Claude agents work in, and the everise orchestrator's work board
+.claude/worktrees/
+.claude/board.md
+node_modules/
