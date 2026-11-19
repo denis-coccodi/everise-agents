@@ -27,7 +27,8 @@ other's files, branches and staged changes.
   there. The session-start hook lists every worktree and what's uncommitted in yours.
 - **A new worktree needs `npm ci`.** A backend one also needs copies of the main checkout's untracked `.env` and
   `.dev.vars`, never committed. The frontend has none.
-- **Stage files by name, never `git stash`.** The stash is shared by every worktree: set work aside with a WIP commit.
+- **Stage files by name, never `git stash`.** The stash is shared by every worktree: set work aside with a commit,
+  `wip(<scope>): <what it holds>` (the commit-msg checks accept it; the squash merge replaces it on `main`).
 - **One owner per area.** Before starting, check nobody else holds the same files: the board, `git worktree list`,
   `gh pr list`.
 - **Remove your worktree once its PR is merged or dropped** (`git worktree remove <path>`), never another session's.
@@ -37,11 +38,15 @@ other's files, branches and staged changes.
 - **Backend `wrangler dev`:** 8791, 8792, … with `--ip 127.0.0.1`. On Windows a stopped wrangler can keep its port.
 - **Frontend dev server:** 4201, 4202, …. Port 4200 belongs to the window open on `everise-frontend`.
 
-## The work board
+## The feature's issue and the work board
 
-When the orchestrator coordinates work, it keeps a board in `.claude/board.md` in the main checkout of the repository
-it was started in (ignored by git): who holds which files, branch, worktree, port and PR, and who holds staging. Read
-it before starting work alongside it.
+A feature or fix that takes more than one PR, or spans both repositories, has a GitHub issue: its goal, the decisions
+made, the API between the repositories, and a task per PR, ticked as each merges. Its PRs say
+`Part of denis-coccodi/<repo>#<issue>`; picking the work up later, read the issue first. A one-PR change needs none.
+
+When the orchestrator coordinates work, it also keeps a board in `.claude/board.md` in the main checkout of the
+repository it was started in (ignored by git): who holds which files, branch, worktree, port and PR right now, and who
+holds staging. Read it before starting work alongside it.
 
 ## A change across both repositories
 
