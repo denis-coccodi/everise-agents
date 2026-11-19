@@ -7,20 +7,34 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-const input = JSON.parse(readFileSync(0, 'utf8'));
+// What Claude Code sends a PreToolUse hook: the tool's input, and the session's directory.
+interface HookInput {
+  tool_input?: { command?: unknown };
+  cwd?: string;
+}
+
+// A check run's state, as `gh pr view --json statusCheckRollup` gives it: a check run or a commit status.
+interface Check {
+  name?: string;
+  context?: string;
+  conclusion?: string;
+  state?: string;
+}
+
+const input = JSON.parse(readFileSync(0, 'utf8')) as HookInput;
 const command = String(input.tool_input?.command ?? '');
 const cwd = input.cwd || process.cwd();
 
 // `git [-C <dir>] <sub>`, anywhere in a chained command.
-const git = (sub) => new RegExp(String.raw`\bgit(?:\s+-C\s+(?:"[^"]*"|'[^']*'|\S+))*\s+${sub}`);
+const git = (sub: string) => new RegExp(String.raw`\bgit(?:\s+-C\s+(?:"[^"]*"|'[^']*'|\S+))*\s+${sub}`);
 
 // The directory a git command acts on: its -C, else the session's.
-const dirOf = (sub) => {
+const dirOf = (sub: string) => {
   const m = command.match(new RegExp(String.raw`\bgit\s+-C\s+("[^"]*"|'[^']*'|\S+)\s+${sub}`));
-  return m ? m[1].replace(/^["']|["']$/g, '') : cwd;
+  return m?.[1] ? m[1].replace(/^["']|["']$/g, '') : cwd;
 };
 
-const gitOut = (dir, ...args) => {
+const gitOut = (dir: string, ...args: string[]) => {
   try {
     return execFileSync('git', ['-C', dir, ...args], { encoding: 'utf8' }).trim();
   } catch {
@@ -28,7 +42,7 @@ const gitOut = (dir, ...args) => {
   }
 };
 
-const block = (reason) => {
+const block = (reason: string): never => {
   process.stderr.write(`Blocked by the everise guard: ${reason}\n`);
   process.exit(2);
 };
@@ -100,7 +114,8 @@ if (switching.test(command) && !/\s--\s/.test(command)) {
 }
 
 // A new branch, or one renamed, is named feature/, bugfix/ or hotfix/<description> (feature-branch skill).
-const all = (re) => [...command.matchAll(new RegExp(re.source, 'g'))].map((m) => m[1].replace(/^["']|["']$/g, ''));
+const all = (re: RegExp) =>
+  [...command.matchAll(new RegExp(re.source, 'g'))].map((m) => (m[1] ?? '').replace(/^["']|["']$/g, ''));
 const named = [
   ...all(git(String.raw`(?:switch\s+-[cC]|checkout\s+-[bB])\s+([^\s;&|]+)`)),
   ...all(git(String.raw`worktree\s+add\s+${ARGS}-[bB]\s+([^\s;&|]+)`)),
@@ -120,14 +135,15 @@ for (const tag of all(git(String.raw`tag\s+${ARGS}(prod-[^\s;&|]*)`))) {
 // A pull request merges only once its `test` check has passed (feature-branch skill).
 const merge = command.match(/\bgh\s+pr\s+merge\b([^;&|\n]*)/);
 if (merge) {
-  const args = merge[1].trim().split(/\s+/).filter(Boolean);
-  const pr = args.find((a, i) => !a.startsWith('-') && !['-R', '--repo'].includes(args[i - 1]));
+  const args = (merge[1] ?? '').trim().split(/\s+/).filter(Boolean);
+  const pr = args.find((a, i) => !a.startsWith('-') && !['-R', '--repo'].includes(args[i - 1] ?? ''));
   const at = args.findIndex((a) => a === '-R' || a === '--repo');
   const repo = at >= 0 ? args[at + 1] : undefined;
-  let checks = null;
+  let checks: Check[] = [];
   try {
     const view = ['pr', 'view', ...(pr ? [pr] : []), ...(repo ? ['--repo', repo] : []), '--json', 'statusCheckRollup'];
-    checks = JSON.parse(execFileSync('gh', view, { cwd, encoding: 'utf8' })).statusCheckRollup;
+    checks = (JSON.parse(execFileSync('gh', view, { cwd, encoding: 'utf8' })) as { statusCheckRollup: Check[] })
+      .statusCheckRollup;
   } catch {
     block("couldn't read the pull request's checks; merge once `gh pr checks` shows `test` passed.");
   }
@@ -150,7 +166,7 @@ if (
 // Prettier on the files changed only, never a folder or a glob: a folder run rewrites untouched files' line endings.
 const prettier = command.match(/\bprettier\b[^;&|\n]*/)?.[0];
 if (prettier && /\s(?:--write|-w)\b/.test(prettier)) {
-  const isDir = (p) => {
+  const isDir = (p: string) => {
     try {
       return statSync(resolve(cwd, p)).isDirectory();
     } catch {

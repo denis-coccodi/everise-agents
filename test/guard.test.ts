@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 
-const GUARD = fileURLToPath(new URL('../plugins/everise/hooks/guard.mjs', import.meta.url));
+const GUARD = fileURLToPath(new URL('../plugins/everise/hooks/guard.ts', import.meta.url));
 
 // A clean git repository with a folder in it, for the commands that look at the checkout.
 const repo = mkdtempSync(join(tmpdir(), 'everise-guard-'));
@@ -15,7 +15,7 @@ execFileSync('git', ['init', '-q', '-b', 'main', repo]);
 execFileSync('git', ['-C', repo, '-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-q', '--allow-empty', '-m', 'chore: init']);
 mkdirSync(join(repo, 'libs'));
 
-function decide(command) {
+function decide(command: string) {
   const r = spawnSync('node', [GUARD], { input: JSON.stringify({ tool_input: { command }, cwd: repo }), encoding: 'utf8' });
   if (r.status === 2) return 'block';
   if (r.status === 0) return r.stdout.includes('"ask"') ? 'ask' : 'allow';
