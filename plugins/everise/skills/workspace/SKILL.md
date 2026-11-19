@@ -37,11 +37,15 @@ other's files, branches and staged changes.
 - **Backend `wrangler dev`:** 8791, 8792, … with `--ip 127.0.0.1`. On Windows a stopped wrangler can keep its port.
 - **Frontend dev server:** 4201, 4202, …. Port 4200 belongs to the window open on `everise-frontend`.
 
-## The work board
+## The feature's issue and the work board
 
-When the orchestrator coordinates work, it keeps a board in `.claude/board.md` in the main checkout of the repository
-it was started in (ignored by git): who holds which files, branch, worktree, port and PR, and who holds staging. Read
-it before starting work alongside it.
+A feature or fix that takes more than one PR, or spans both repositories, has a GitHub issue: its goal, the decisions
+made, the API between the repositories, and a task per PR, ticked as each merges. Its PRs say
+`Part of denis-coccodi/<repo>#<issue>`; picking the work up later, read the issue first. A one-PR change needs none.
+
+When the orchestrator coordinates work, it also keeps a board in `.claude/board.md` in the main checkout of the
+repository it was started in (ignored by git): who holds which files, branch, worktree, port and PR right now, and who
+holds staging. Read it before starting work alongside it.
 
 ## A change across both repositories
 
