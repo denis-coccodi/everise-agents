@@ -12,7 +12,7 @@ try {
   // No input: the current directory.
 }
 
-const git = (...args) => {
+const git = (...args: string[]) => {
   try {
     return execFileSync('git', ['-C', cwd, ...args], { encoding: 'utf8' }).trim();
   } catch {

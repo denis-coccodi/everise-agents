@@ -1,6 +1,6 @@
 {
   "name": "everise",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Everise's shared Claude Code setup: the orchestrator, the git guard and session-start hooks, and the workspace rules for everise-backend and everise-frontend.",
   "repository": "https://github.com/denis-coccodi/everise-agents",
   "author": {

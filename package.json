@@ -1,10 +1,18 @@
 {
   "name": "everise-agents",
   "private": true,
-  "description": "Everise's shared Claude Code plugin: the orchestrator, the git guard and session-start hooks, and the workspace skill.",
+  "description": "Everise's shared Claude Code plugin: the orchestrator, the git guard and session-start hooks, and the workspace skill. TypeScript, run by Node as it is (22.18 or later).",
   "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
   "scripts": {
     "prepare": "git config core.hooksPath .githooks || exit 0",
-    "test": "node --test test/guard.test.mjs"
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "tsc -p tsconfig.json && node --test test/guard.test.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "typescript": "^7.0.2"
   }
 }

@@ -14,6 +14,7 @@ skills; this holds only what they share.
 
 ## Install
 
+The hooks are TypeScript, which Node runs as it is: they need Node 22.18 or later on the `PATH`, and nothing installed.
 Each repository turns the plugin on in its committed `.claude/settings.json`. On each machine, once per clone, from
 the repository's folder:
 
@@ -33,6 +34,7 @@ It's optional: without it, Claude Code works in the repository as usual, and age
 
 ## Change it
 
-Edit the plugin in `plugins/everise/`, run `npm test` (the guard's tests, with Node 24), and bump `version` in
+Edit the plugin in `plugins/everise/` (TypeScript: only syntax Node can strip, so no enums or namespaces; see
+`tsconfig.json`), run `npm install` once and `npm test` (the type-check, then the guard's tests), and bump `version` in
 `plugins/everise/.claude-plugin/plugin.json`. To try a change before it's merged, start Claude Code with
 `--plugin-dir <path to plugins/everise>`. After an update, `claude plugin update everise@everise` in each repository.

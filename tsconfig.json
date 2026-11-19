@@ -1,0 +1,20 @@
+{
+  // Type-checked only (`npm test`): Node runs the .ts files as they are, stripping the types, so they may use only
+  // syntax it can strip (no enums, namespaces or parameter properties) and import with the .ts extension.
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "strict": true,
+    "noEmit": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "types": ["node"],
+    "skipLibCheck": true
+  },
+  "include": ["plugins/**/*.ts", "scripts/**/*.ts", "test/**/*.ts"]
+}

@@ -11,7 +11,7 @@ const FROM_GIT = /^(?:Merge |Revert "|fixup! |squash! |amend! )/;
 
 const file = process.argv[2] || process.env.HUSKY_GIT_PARAMS;
 if (!file) {
-  console.error('Usage: node scripts/check-commit-msg.mjs <commit message file>');
+  console.error('Usage: node scripts/check-commit-msg.ts <commit message file>');
   process.exit(1);
 }
 const first =

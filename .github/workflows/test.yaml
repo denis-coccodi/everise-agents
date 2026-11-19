@@ -13,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+      - run: npm ci
       # The guard's merge check asks GitHub about a pull request: it needs a token.
       - run: npm test
         env:
