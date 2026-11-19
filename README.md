@@ -23,23 +23,13 @@ claude plugin marketplace add denis-coccodi/everise-agents --scope project
 claude plugin install everise@everise --scope project
 ```
 
-Then start Claude Code there as usual. To coordinate work across both repositories, start the orchestrator from
-either repository's main checkout:
+After an update: `claude plugin update everise@everise` in each repository.
 
-```sh
-npm run orchestrator
-```
+## Use
 
-It runs `claude --agent everise:orchestrator --add-dir ../everise-frontend` from the backend (`../everise-backend` from
-the frontend): the added folder brings the other repository's agents and skills along, which a setting can't do
-(`additionalDirectories` gives file access only). It needs the `claude` command on the `PATH`. Started without the
-other repository, the orchestrator says so and stops.
+Claude Code works in either repository as usual; agents run only when asked. To coordinate work across both, run
+`npm run orchestrator` from either repository's main checkout. It starts the orchestrator with the other repository
+added (`--add-dir`), which brings that repository's agents and skills along; a setting can't do that. It needs `claude`
+on the `PATH`.
 
-It's optional: without it, Claude Code works in the repository as usual, and agents run only when asked.
-
-## Change it
-
-Edit the plugin in `plugins/everise/` (TypeScript: only syntax Node can strip, so no enums or namespaces; see
-`tsconfig.json`), run `npm install` once and `npm test` (the type-check, then the guard's tests), and bump `version` in
-`plugins/everise/.claude-plugin/plugin.json`. To try a change before it's merged, start Claude Code with
-`--plugin-dir <path to plugins/everise>`. After an update, `claude plugin update everise@everise` in each repository.
+Changing the plugin: see [CLAUDE.md](CLAUDE.md).
