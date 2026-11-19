@@ -23,12 +23,17 @@ claude plugin marketplace add denis-coccodi/everise-agents --scope project
 claude plugin install everise@everise --scope project
 ```
 
-Then start Claude Code there as usual. To coordinate work across both repositories, start the orchestrator from one
-with the other added:
+Then start Claude Code there as usual. To coordinate work across both repositories, start the orchestrator from
+either repository's main checkout:
 
 ```sh
-claude --agent everise:orchestrator --add-dir ../everise-frontend
+npm run orchestrator
 ```
+
+It runs `claude --agent everise:orchestrator --add-dir ../everise-frontend` from the backend (`../everise-backend` from
+the frontend): the added folder brings the other repository's agents and skills along, which a setting can't do
+(`additionalDirectories` gives file access only). It needs the `claude` command on the `PATH`. Started without the
+other repository, the orchestrator says so and stops.
 
 It's optional: without it, Claude Code works in the repository as usual, and agents run only when asked.
 
