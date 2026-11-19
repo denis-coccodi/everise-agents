@@ -7,7 +7,7 @@ skills; this holds only what they share.
 
 | Part | What it does |
 | --- | --- |
-| `everise:orchestrator` agent | Plans work across both repositories, hands each piece to an agent in its own worktree, keeps a work board, follows each change to a merged PR. Never edits code. |
+| `everise:orchestrator` agent | Plans work across both repositories and keeps each feature's plan in a GitHub issue, hands each piece to an agent in its own worktree, keeps a work board, follows each change to a merged PR. Never edits code. |
 | `everise:workspace` skill | How the two repositories and the sessions working on them fit together: one git worktree per change, ownership, ports, the board, the order of a change across both. |
 | Guard hook | Runs before every shell command. Blocks the git commands that trample other sessions' work (`git add -A`, `git stash`, `reset --hard`, force pushes, commits or pushes to `main`), branches not named `feature/`, `bugfix/` or `hotfix/`, `gh pr merge` before `test` passed, writes to branch protection, `prettier --write` on a folder. Asks first before a deploy or a write to production. |
 | Session-start hook | Tells each session its checkout, branch, uncommitted files and the repository's other worktrees. |
