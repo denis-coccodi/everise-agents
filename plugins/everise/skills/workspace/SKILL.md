@@ -27,7 +27,8 @@ other's files, branches and staged changes.
   there. The session-start hook lists every worktree and what's uncommitted in yours.
 - **A new worktree needs `npm ci`.** A backend one also needs copies of the main checkout's untracked `.env` and
   `.dev.vars`, never committed. The frontend has none.
-- **Stage files by name, never `git stash`.** The stash is shared by every worktree: set work aside with a WIP commit.
+- **Stage files by name, never `git stash`.** The stash is shared by every worktree: set work aside with a commit,
+  `wip(<scope>): <what it holds>` (the commit-msg checks accept it; the squash merge replaces it on `main`).
 - **One owner per area.** Before starting, check nobody else holds the same files: the board, `git worktree list`,
   `gh pr list`.
 - **Remove your worktree once its PR is merged or dropped** (`git worktree remove <path>`), never another session's.
