@@ -1,0 +1,16 @@
+{
+  "name": "everise",
+  "owner": {
+    "name": "Everise"
+  },
+  "metadata": {
+    "description": "Everise's shared Claude Code setup for everise-backend and everise-frontend."
+  },
+  "plugins": [
+    {
+      "name": "everise",
+      "source": "./plugins/everise",
+      "description": "Everise's shared Claude Code setup: the orchestrator, the git guard and session-start hooks, and the workspace rules for everise-backend and everise-frontend."
+    }
+  ]
+}

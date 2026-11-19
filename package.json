@@ -1,0 +1,9 @@
+{
+  "name": "everise-agents",
+  "private": true,
+  "description": "Everise's shared Claude Code plugin: the orchestrator, the git guard and session-start hooks, and the workspace skill.",
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/guard.test.mjs"
+  }
+}
